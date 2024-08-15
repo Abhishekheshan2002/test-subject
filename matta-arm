@@ -1,0 +1,129 @@
+#include <Servo.h>
+Servo s1 = Servo();
+Servo s2 = Servo();
+Servo s3 = Servo();
+Servo s4 = Servo();
+
+int a1 = 90;
+int a2 = 90;
+int a3 = 90;
+int a4 = 45;
+
+#include <IRremote.h>
+//#include <ir_Lego_PF_BitStreamEncoder.h>
+
+IRrecv r = IRrecv(7);
+
+decode_results d = decode_results();
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  r.enableIRIn();
+
+  s1.attach(8);
+  s1.attach(9);
+  s1.attach(10);
+  s1.attach(11);
+
+  s1.write(150);
+  s2.write(150);
+  s3.write(150);
+  s4.write(150);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  if (r.decode(&d)) {
+    int v = d.value;
+
+    if (v == -23971) {
+      for (int x = 0; x < 10; x++) {
+        a1++;
+        if (a1 >= 180) {
+          a1 = 180;
+        }
+        s1.write(a1);
+        delay(40);
+      }
+    }
+    if (v == 25245) {
+      for (int x = 0; x < 10; x++) {
+        a1--;
+        if (a1 <= 0) {
+          a1 = 0;
+        }
+        s1.attach(a1);
+        delay(40);
+      }
+    }
+    if (v == -7651) {
+      for (int x = 0; x < 10; x++) {
+        a2++;
+        if (a2 >= 180) {
+          a2 = 180;
+        }
+        s2.write(a2);
+        delay(40);
+      }
+    }
+    if (v == 8925) {
+      for (int x = 0; x < 10; x++) {
+        a2--;
+        if (a2 <= 0) {
+          a2 = 0;
+        }
+        s2.attach(a1);
+        delay(40);
+      }
+    }
+
+    if (v == 765) {
+      for (int x = 0; x < 10; x++) {
+        a3++;
+        if (a3 >= 180) {
+          a3 = 180;
+        }
+        s3.write(a3);
+        delay(40);
+      }
+    }
+    if (v == -15811) {
+      for (int x = 0; x < 10; x++) {
+        a3--;
+        if (a3 <= 0) {
+          a3 = 0;
+        }
+        s3.attach(a3);
+        delay(40);
+      }
+    }
+
+    if (v == -8161) {
+      for (int x = 0; x < 10; x++) {
+        a4++;
+        if (a4 >= 180) {
+          a4 = 180;
+        }
+        s2.write(a4);
+        delay(40);
+      }
+    }
+    if (v == -22441) {
+      for (int x = 0; x < 10; x++) {
+        a4--;
+        if (a4 <= 0) {
+          a4 = 0;
+        }
+        s4.attach(a4);
+        delay(40);
+      } 
+    }
+
+
+
+
+    Serial.println(v);
+    r.resume();
+  }
+}
